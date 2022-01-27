@@ -1,6 +1,6 @@
 ---
 title: "Class Reference"
-author: "Student name"
+author: "Abigail Russ"
 output:
   html_document:
     theme: cerulean
@@ -17,4 +17,67 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ## Introduction
 
-Consider this my personal guide to the commands and functions you will learn. In general, when you come across an R command or function that you want to remember, put it in here along with a description of what it does and when you'd use it.
+Things I learned on Jan. 27
+Working Directory: To set the working directory click on more and click set working directory. That tells R where we'll be working from. Here's the code for it: setwd("~/Desktop/JOUR 472/data_journalism_2022_spring")
+
+```{r} 
+install.packages("tidyverse")
+```
+```{r}
+library(tidyverse)
+```
+The library function loads an R library such as the tidyverse, providing     access to the verbs and functions that library contains. You have to load a library before you can use its functions.
+
+Code is written with 3 
+``` {r} 
+new line run the line of code then the next line 3 
+```
+
+Name a Variable: 
+```{r}
+number <- 2
+name <- "Abigail"
+```
+
+Multiply Numbers:
+```{r}
+number * number
+```
+
+Glimpse ()-  gives a sense of the data, some of the values in each field/variable/column, and the data types of each field/variable/column.
+
+```{r}
+glimpse(ppp_maryland_loans)
+```
+
+Examine data "head"
+codeblock to use head() examines the first six rows of data. Explore the data by clicking the black arrow on the right side of the output table, allowing you to examine additional columns.
+```{r}
+head(ppp_maryland_loans)
+```
+
+Group and count
+group the ppp_maryland_loans dataframe by the county for each loan, and then count the number of loans in that group.
+
+start with ppp loans and then group by project county nameand then summarize count up each number of loans in each bucket
+```{r}
+ppp_maryland_loans %>%  
+  group_by(project_county_name) %>% 
+  summarise(
+    count_loans = n()
+  )
+```
+Mean, Median, Minimum, Maximum
+```{r}
+ppp_maryland_loans %>%
+  group_by(project_county_name) %>%
+  summarise(
+    count_loans = n(),
+    total_loans_amount = sum(amount),
+    mean_loan_amount = mean(amount),
+    median_loan_amount = median(amount),
+    min_loan_amount = min(amount),
+    max_loan_amount = max(amount)
+  ) %>%
+  arrange(desc(max_loan_amount))
+```
