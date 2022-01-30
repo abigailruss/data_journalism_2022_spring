@@ -105,7 +105,7 @@ wv_ppp_loans %>%
 
 Store it as a variable object called `wv_summary` so that you can examine it with the data viewer. What newsworthy nuggets jump out at you that you could imagine dropping into a news story? Write a few summary sentences with overall findings.
 
-**A7** [write your answer here]
+**A7** I think that it's newsworthy West Virginia gave PPP loans to places that list counties outside of the state of West Virginia, for example, Palm Beach. Some businesses only requested a few hundred dollars in certain counties while in Palm Beach, the minimum amount was 625,600.00. Fayette County had 590 loans compared with Doddridge's 43 loans but the average loan in Doddridge was 138,679.93 while it was only 77,581.86 in Fayette County. 
 ```{r}
 wv_summary <- wv_ppp_loans %>%
   group_by(project_county_name) %>%
