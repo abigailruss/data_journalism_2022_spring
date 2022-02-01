@@ -81,3 +81,69 @@ ppp_maryland_loans %>%
   ) %>%
   arrange(desc(max_loan_amount))
 ```
+
+Mutate-- allows you to add to your data
+
+Filter-- reduce the data you're looking at to meet a certain criteria
+(look at only the actual counties in WV)
+    when you only want to see a subset that matches some criteria 
+    `filter(COLUMN_NAME OPERATOR CRITERIA)`
+    filter(project_county_name == "PRINCE GEORGES")
+    
+```{r}
+prince_georges <- maryland_ppp %>% filter(project_county_name == "PRINCE GEORGES")
+head(prince_georges)
+```
+
+Dates-- have their own data type of date comparisons 
+  lubridate is for dates
+  
+read_csv means that its reading in a csv file (it can even be in a zip file that I don't have to unzip first)
+
+head()-  gives you the first 6 rows of the data (the top of the file)
+
+summary()-- gives min, median mean max for every column 
+
+colnames()- list of column names
+
+glimpse()- a quick look at the columns, data types and some examples of the data
+
+add a new column based on an existing column- use mutate
+```{r}
+maryland_ppp %>%
+  select(loan_number, amount, payroll_proceed) %>% #select says what you want to see 
+  #mutate(new_column = value)
+  mutate(percent_payroll = payroll_proceed/amount
+)
+```
+
+if its inside maryland use if/else
+```{r}
+# if/else example
+maryland_with_in_out <- maryland_ppp %>%
+  mutate(
+    in_out = if_else(
+        servicing_lender_state == 'MD', "IN", "OUT"
+      )
+  )
+```
+
+Case When
+want to add a column called jobs retained category
+populate it based on the value of jobs retained
+when its greater then or equal to 10 but less then 25 give it 25_to_50
+```{r}
+# case_when example
+maryland_jobs_categories <- maryland_ppp %>%
+mutate(
+  jobs_retained_category = case_when(
+    jobs_retained < 10 ~ 'under_10',
+    jobs_retained >= 10 & jobs_retained < 25 ~ '10_to_25',
+    jobs_retained >= 25 & jobs_retained < 50 ~ '25_to_50',
+    jobs_retained >= 50 & jobs_retained < 100 ~ '50_to_100',
+    jobs_retained >= 100 & jobs_retained < 250 ~ '100_to_250',
+    jobs_retained >= 250 & jobs_retained < 500 ~ '250_to_500',
+    jobs_retained == 500 ~ '500'
+  )
+)
+```
