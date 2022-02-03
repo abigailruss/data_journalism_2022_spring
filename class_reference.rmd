@@ -160,11 +160,34 @@ Multiple Filters: when you want to see the intersection between two things (like
 ```{r}
 and_prince_georges <- maryland_ppp %>% filter(project_county_name == "PRINCE GEORGES" & business_type == "Non-Profit Organization" & amount > 150000)
 
-nrow(and_prince_georges)  <------ this is asking for how many rows there will be in what you are asking for 
+nrow(and_prince_georges)  <------  this is asking how many rows there will be  
 ```
 
 ```{r}
 or_prince_georges <- maryland_ppp %>% filter(project_county_name == "PRINCE GEORGES" | business_type == "Non-Profit Organization" | amount > 150000)
 
-nrow(or_prince_georges)   <------ this is asking for how many rows there will be in what you are asking for 
+nrow(or_prince_georges)   <------ this is asking how many rows there will be 
+```
+
+read.csv-- this doesn't want to presume too much so it leaves the dates as a character 
+          you can tell the code that the column is a date using lubridate
+          read.csv will make an educated guess about what is a date while lubridate you're telling it what the date is 
+```{r}
+lubridate_maryland_ppp <- maryland_ppp_sample %>% mutate(
+    CleanDate = ymd_hms(date_approved)
+)
+glimpse(lubridate_maryland_ppp)
+```
+
+If you go to the data set and click on import dataset you can specifically go and skip rows or tell it to make something a number etc
+
+floor_date rounds all of the dates down to the first day of the month and so it gives you a number for how many times something happened in a month
+    if R doesn't know its a date it can't give you a month so its important to have stuff defined as dates instead of character fields
+    (ceiling dates round it up to the next month which is bad because it changes the means of months-- its importnat to use if you want to see what came in before a deadline that was the first of the month)
+```{r}
+maryland_ppp %>%
+  mutate(Month = floor_date(date_approved, "month")) %>%
+  group_by(Month) %>%
+  summarise(total = n()) %>%
+  arrange(desc(total))
 ```
