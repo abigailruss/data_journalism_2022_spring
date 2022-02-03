@@ -85,10 +85,14 @@ ppp_maryland_loans %>%
 Mutate-- allows you to add to your data
 
 Filter-- reduce the data you're looking at to meet a certain criteria
+Filter is a tidyverse verb that uses criteria you supply to return a subset of the original data. Here's how it is structured:
+`filter(COLUMN_NAME OPERATOR CRITERIA)`
+
 (look at only the actual counties in WV)
     when you only want to see a subset that matches some criteria 
     `filter(COLUMN_NAME OPERATOR CRITERIA)`
     filter(project_county_name == "PRINCE GEORGES")
+    filter(amount >= "10000")
     
 ```{r}
 prince_georges <- maryland_ppp %>% filter(project_county_name == "PRINCE GEORGES")
@@ -146,4 +150,21 @@ mutate(
     jobs_retained == 500 ~ '500'
   )
 )
+```
+
+To change the way the cases are you can do 
+maryland_ppp <- maryland_ppp  %>% mutate(project_city = str_to_upper(project_city))
+  So here you can also string to lower and don't forget its MUTATE to do this to make it all upper case or all lower case when you're   filtering stuff
+  
+Multiple Filters: when you want to see the intersection between two things (like a ven diagram) use the and function you can also do or!!
+```{r}
+and_prince_georges <- maryland_ppp %>% filter(project_county_name == "PRINCE GEORGES" & business_type == "Non-Profit Organization" & amount > 150000)
+
+nrow(and_prince_georges)  <------ this is asking for how many rows there will be in what you are asking for 
+```
+
+```{r}
+or_prince_georges <- maryland_ppp %>% filter(project_county_name == "PRINCE GEORGES" | business_type == "Non-Profit Organization" | amount > 150000)
+
+nrow(or_prince_georges)   <------ this is asking for how many rows there will be in what you are asking for 
 ```
