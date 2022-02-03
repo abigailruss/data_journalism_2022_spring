@@ -80,10 +80,15 @@ arrange(desc(count_loans))
 
 
 **Q4** Which month in 2021 had the most loans approved?
-**A4** [write your answer here]
+**A4** March 2021 had the most loans approved with 4394 loans approved. 
 
 ```{r}
-# Write the code to produce your answer here
+west_virginia_ppp %>%
+  mutate(Month = floor_date(date_approved, "month")) %>%
+  group_by(Month) %>%
+  summarise(total = n()) %>%
+  arrange(desc(total)) %>%
+  filter(Month > '2020-12-01')
 
 ```
 
