@@ -50,7 +50,7 @@ west_virginia_ppp <- read_rds("data/lab_02.rds")
 Hint: You will need to use `case_when` to make this work.
 **A1** The most loans provided were between 10k_50k, with 15089	loans provided, followed by loans under 10k	(9227 provided), loans between 100k and 500k (4150 provided), 50k to100k	(with 3976 loans provided), 500k to 1m with only 538 loans provided and then finally, the least amount of loans was over one million dollars, which only provided 356 loans. 
 ```{r}
-west_virginia_ppp %>% 
+loan_amount <- west_virginia_ppp %>% 
   mutate(loan_amounts = case_when(
     amount < 10000 ~ 'under_10k',
     amount >= 10000 & amount < 50000 ~ '10k_50k',
@@ -68,22 +68,25 @@ arrange(desc(count_loans))
 ```
 
 **Q2** Some of the loans appear not to have been paid out - there is a column representing the amount of money that hasn't been disbursed to the applicant. Which servicing lenders have the most loans with undisbursed amounts greater than 0?
-**A2** [write your answer here]
+**A2** Davis Trust Company and Miners & Merchants Bank have the most undisbursed amounts greater than 0. Davis Trust and Company has 12 undispersed loan while Miners & Merchants Bank has 1 undisbursed loan.
 
 ```{r}
-# Write the code to produce your answer here
+west_virginia_ppp %>%
+  filter(undisbursed_amount>0) %>%
+  group_by(servicing_lender_name) %>%
+  summarise(count=n())
 
 ```
 
 **Q3** What are some potential reasons why a loan might not be paid out? What questions does that circumstance raise for you?
-**A3** [write your answer here]
+**A3** A loan might not be paid out if it the business had enough money and didn't want to take more then they needed. To me, if the loan was provided and completely forgiven it seems strange that the company would not take the entire loan as that seems like free money. Why would the companies apply for such a big loan if they didn't need all of the money that they asked for? Something seems suspicious. 
 
 
 **Q4** Which month in 2021 had the most loans approved?
 **A4** March 2021 had the most loans approved with 4394 loans approved. 
 
 ```{r}
-west_virginia_ppp %>%
+west_virginia_ppp %>% 
   mutate(Month = floor_date(date_approved, "month")) %>%
   group_by(Month) %>%
   summarise(total = n()) %>%
@@ -93,9 +96,13 @@ west_virginia_ppp %>%
 ```
 
 **Q5** How many loans went to West Virginia applicants that listed the maximum number of jobs retained (500)? Which one had the earliest approved date?
-**A5** [write your answer here]
+**A5** There are 10 West Virginia applicants that listed the maximum number of jobs retained, which is 500. J. AUSTIN HEATING & COOLING, INC. had the earliest approved date which was April 8, 2020.
 
 ```{r}
-# Write the code to produce your answer here
+west_virginia_ppp%>%
+  filter(jobs_retained==500)%>%
+  select(name, jobs_retained, date_approved)%>%
+  arrange(date_approved)
+
 
 ```

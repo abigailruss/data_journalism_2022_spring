@@ -191,3 +191,6 @@ maryland_ppp %>%
   summarise(total = n()) %>%
   arrange(desc(total))
 ```
+
+To find a specific company's information:
+west_virginia_ppp %>% filter(servicing_lender_name=="Davis Trust Company")
