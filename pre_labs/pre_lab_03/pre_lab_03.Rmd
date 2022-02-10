@@ -185,7 +185,7 @@ ppp_maryland_loans %>%
 
 ### Task 16: Look for internal consistency
 **Task** Run the following codeblock to examine all loans under $100 and look at whether the various fields with amounts align. Do they? Answer below.
-**Answer** 
+**Answer**  Yes, They do align
 
 
 ```{r}
@@ -238,7 +238,7 @@ arnold_md_loans
 
 ### Task 6: Use clean_names()
 **Task** Run the following codeblock to use the `clean_names()` function from janitor to standardize column names. How does the function change the name of the column "1_id"? Answer below. Add a description of what this code does to your reference notebook.
-**Answer** It now makes it x1_id instead ____________- #reveiw this!
+**Answer** It now makes it x1_id instead which means that the code is now starting character instead of a number, which makes it a valid name in R. 
 
 
 ```{r}
@@ -251,7 +251,7 @@ cleaned_arnold_md_loans
 ```
 
 ### Task 7: Use rename()
-**Task** Run the following codeblock to use the clean_names() function from janitor to standardize column names and then use rename() to change the "x1_id" column. Add a description of what this code does to your reference notebook.
+**Task** Run the following codeblock to use the clean_names() function from janitor to standardize column names and then use rename() to change the "x1_id" column. Add a description of what this code does to your reference notebook. #this is the rename function 
 
 ```{r}
 # cleaning function
@@ -320,7 +320,7 @@ cleaned_arnold_md_loans %>%
 
 ### Task 12: Check for duplicate rows
 **Task** Run the following codeblock to use distinct() to get rid of duplicate rows. How many rows does the new dataframe have? Answer below. Add a description of what this code does to your reference notebook.
-**Answer** 
+**Answer** The new dataframe has 5 rows now. 
 
 ```{r}
 # cleaning function
@@ -338,7 +338,7 @@ cleaned_arnold_md_loans
 
 ### Task 13: Clean up ZIP code
 **Task** Run the following codeblock to use str_sub() to convert the ZIP codes that have nine digits to five digits, standardizing the field. Add a description of what this code does to your reference notebook.
-**Answer**
+**Answer** It made it so that all the zipcodes are 5 digits long without any hyphens. 
 
 ```{r}
 # cleaning function
@@ -357,6 +357,7 @@ cleaned_arnold_md_loans
 
 ### Task 14: Clean up city field
 **Task** Run the following codeblock to use str_tot_title() to standarize capitalization in the "city" field. How many mispellings of Arnold remain after running this code? Answer below. Add a description of what this code does to your reference notebook.
+There are still 2 misspellings of Arnold. 
 
 ```{r}
 # cleaning function
@@ -377,7 +378,7 @@ cleaned_arnold_md_loans
 
 ### Task 15: Clean up city field more with case_when()
 **Task** Run the following codeblock to use case_when() to fix misspellings of Arnold in the "city" field. How many mispellings of Arnold remain after running this code? Answer below.
-**Answer**
+**Answer** There is one misspelling of Arnold. 
 
 ```{r}
 # cleaning function
@@ -401,7 +402,7 @@ cleaned_arnold_md_loans
 
 ### Task 16: Clean up city field more with case_when()
 **Task** Run the following codeblock to use case_when() to fix misspellings of Arnold in the "city" field using both the exact match method and the str_detect() method. How many mispellings of Arnold remain after running this code? Answer below. Add a description of what this code does to your reference notebook.
-**Answer**
+**Answer** There are zero misspellings of Arnold. 
 ```{r}
 # cleaning function
 cleaned_arnold_md_loans <- arnold_md_loans %>%
