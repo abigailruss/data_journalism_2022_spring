@@ -1,7 +1,7 @@
 ---
 title: "pre_lab_03.Rmd"
-author: ""
-date: ""
+author: "Abigail Russ"
+date: "2/8/2022"
 output: html_document
 ---
 
@@ -36,16 +36,18 @@ library(tidyverse)
 
 ### Task 2: Load data
 **Task** Load the PPP loan dataset by running the following code. We'll use the guess_max() function as an argument to use the first 10 rows to set the data type. What does the first line of the red Warning message that prints out when you load the data say? Answer below.
-**Answer**
+**Answer** The red warning says that there is one or more parsing issues and we should see 'problems()' for details. 
 
 ```{r}
 ppp_maryland_loans <- read_csv("ppp_loans_md.csv.zip", guess_max=10)
+# guess max says that you're only using the first # of rows to make decisions about what each column is. The lower the number is the higher your confidence in the data is 
 
 ```
 
 ### Task 3: Check for problems on load
 **Task** Check for problems that occurred when loading the ppp loan data for Maryland by running the following code.  How many problems were there, as shown by the number of rows in the output table showing errors? Answer below.
-**Answer**
+**Answer** There were 87,927 errors.
+ #There was a mismatch between what we were expecting and what we got because we made our judgements based on the first 10 rows
 
 ```{r}
 
@@ -55,7 +57,7 @@ problems(ppp_maryland_loans)
 
 ### Task 4: Reload data
 **Task** Run the following codeblock to reload the data, using every row to set the data types. Does it show any parsing errors when you run? Answer below
-**Answer**
+**Answer**  No it does not show any parsing errors because we let it look at all of the code. 
 
 ```{r}
 ppp_maryland_loans <- read_csv("ppp_loans_md.csv.zip", guess_max=195865)
@@ -63,7 +65,7 @@ ppp_maryland_loans <- read_csv("ppp_loans_md.csv.zip", guess_max=195865)
 
 ### Task 5: Examine the data with glimpse
 **Task** Run the following codeblock to glimpse the data.  What data type is the "amount" field?  What data type is the "name" field? What data type is the id column? Answer below.
-**Answer**
+**Answer** It thinks that the amount field is a numeric value (possibly with decimal points), the name field is characters and the id column is a numeric value (possibly with decimal points).
 ```{r}
 glimpse(ppp_maryland_loans)
 ```
@@ -72,14 +74,16 @@ glimpse(ppp_maryland_loans)
 
 ```{r}
 ppp_maryland_loans <- ppp_maryland_loans %>%
+  #you saved the data to itself almost overwriting it 
   mutate(id = as.character(id))
+#as. numeric to make it a number so in () is what you want to save it as
 
 glimpse(ppp_maryland_loans)
 ```
 
 ### Task 7: Examine the franchise column for missing values.
 **Task** Run the following codeblock to group by franchise_name, count the number of loans, then sort from highest to lowest on count. How many loans are there where franchise_name is NA? How many loans are there where the franchise_name is "Subway"? Answer below.
-**Answer**:
+**Answer**: There were 192,959 franchieses without listing a name and there were 275 Subway franchises that applied for PPP loans. 
 
 ```{r}
 
@@ -92,7 +96,7 @@ ppp_maryland_loans %>%
 ```
 ### Task 8: Examine the forgiveness_amount column for missing values.
 **Task** Run the following codeblock to group by forgiveness_amount, count the number of loans, then sort from highest to lowest on count. How many loans are there where forgiveness_amount is NA? Answer below.
-**Answer**:
+**Answer**: There were 135,073 loans where there was nothing listed for forgiveness amount. 
 
 ```{r}
 ppp_maryland_loans %>%
@@ -105,7 +109,7 @@ ppp_maryland_loans %>%
 
 ### Task 9: Examine the forgiveness_date column for missing values.
 **Task** Run the following codeblock to group by forgiveness_date, count the number of loans, then sort from highest to lowest on count and filter to only show NA values. How many loans are there where forgiveness_date is NA? Is it the same as the number for forgiveness_amount? Answer below.
-**Answer**:
+**Answer**: 135,073 loans when the answer is NA. Yes, this is the same number as for the forgiveness_amount. 
 
 ```{r}
 ppp_maryland_loans %>%
@@ -114,12 +118,13 @@ ppp_maryland_loans %>%
     count=n()
   ) %>%
   filter(is.na(forgiveness_date)) %>%
+  #check to see that the value is actually na is.na in the forgiveness_date column
   arrange(desc(count))
 ```
 
 ### Task 10: Examine forgiveness_date and forgiveness_amount together
 **Task** Run the following codeblock to group by forgiveness_date and forgiveness_amount, count the number of loans, then sort from highest to lowest on count and filter to only show NA values. How many loans are there where forgiveness_date and forgiveness_amount is NA? Is it the same as the number for forgiveness_amount and forgiveness_amount run separately in the codeblocks above? What can you conclude from Answer below.
-**Answer**:
+**Answer**: There are 135073 loans where the forgiveness_date and forgiveness_amount is NA. Yes, it is the same as the previous answers. I can conclude that if there are no records for forgiveness amounts there is no way people should be getting a forgiveness date because then something would be wrong. I can conclude that these are the same 135073 records. 
 
 ```{r}
 ppp_maryland_loans %>%
@@ -146,10 +151,11 @@ library(lubridate)
 
 ### Task 13: Look for date gaps in data
 **Task** Run the following codeblock to create a new column called "month_year_approved" that extracts the month and year from the "date_approved" column.  Group by the new "month_year_approved" column, count, and sort by "month_year_approved". How many loans are there in the data for October 2020? Answer below. Add a description of what this code does to your reference notebook.
-**Answer**
+**Answer** It drops off in August 2020 and starts again in Jan. 2021- I'm assuming there are no loans in Oct. 2020 because the first round had ended and the second round hadn't begun yet. 
 ```{r}
 ppp_maryland_loans %>%
   mutate(month_year_approved = floor_date(date_approved, "month")) %>%
+  #does the data sugguest that the program operated the way it was supposed to 
   group_by(month_year_approved) %>%
    summarise(
     count=n()
@@ -159,7 +165,7 @@ ppp_maryland_loans %>%
 
 ### Task 14: Check for suspicious outliers
 **Task** Run the following codeblock to find the largest and smallest loans in the data, by using summarise() without grouping. How much is the largest loan for? How much is the smallest loan for? Are either of these suspicious to you? Why or why not? Answer below.
-**Answer**
+**Answer** The largest loan is for 10000000	dollars and the smallest loan approved is 6 dollars. 
 ```{r}
 
 ppp_maryland_loans %>%
@@ -170,7 +176,7 @@ ppp_maryland_loans %>%
 
 ### Task 15: Look at smallest loans
 **Task** Run the following codeblock to examine all loans under $100. How many are there? Answer below.
-**Answer**
+**Answer** There are 2 loans that were under $100. 
 ```{r}
 
 ppp_maryland_loans %>%
@@ -179,7 +185,8 @@ ppp_maryland_loans %>%
 
 ### Task 16: Look for internal consistency
 **Task** Run the following codeblock to examine all loans under $100 and look at whether the various fields with amounts align. Do they? Answer below.
-**Answer**
+**Answer** 
+
 
 ```{r}
 
@@ -206,7 +213,7 @@ library(janitor)
 
 ### Task 3: Load Arnold, Maryland demonstration data
 **Task** Run the following codeblock to load a demonstration slice of the data for Arnold, Maryland. How many rows are in this demonstration data set?
-**Answer**
+**Answer** There are 6 rows
 
 ```{r}
 arnold_md_loans <- read_rds("arnold_md_loans.rds")
@@ -214,7 +221,7 @@ arnold_md_loans <- read_rds("arnold_md_loans.rds")
 
 ### Task 4: Examine the data with glimpse
 **Task** Run the following codeblock to glimpse the data.  What data type is the "amount" field? Answer below.
-**Answer**
+**Answer** Amount is a character field.
 ```{r}
 glimpse(arnold_md_loans)
 ```
@@ -223,7 +230,7 @@ And let's examine the full data set.
 
 ### Task 5: Examine the data table
 **Task** Run the following codeblock to examine the data. Name three problems the book chapter says exist in this data set that could prevent us from answering questions?  Answer below
-**Answer**
+**Answer** There are repeating rows, the name column is in all caps while the rest of them are lowercase, street address does not have an underscore in the name. 
 
 ```{r}
 arnold_md_loans
@@ -231,7 +238,7 @@ arnold_md_loans
 
 ### Task 6: Use clean_names()
 **Task** Run the following codeblock to use the `clean_names()` function from janitor to standardize column names. How does the function change the name of the column "1_id"? Answer below. Add a description of what this code does to your reference notebook.
-**Answer**
+**Answer** It now makes it x1_id instead ____________- #reveiw this!
 
 
 ```{r}
@@ -260,7 +267,7 @@ cleaned_arnold_md_loans
 
 ### Task 8: Try summarizing the amount column
 **Task** Run the following codeblock to attempt to add up the amount of all loans. What does the error say when you run this code? What do you think it means? Answer below.
-**Answer**
+**Answer** The error says that there is a problem with the total_amount of the summaries column because it can't sum the total amount because the thing we are trying to sum is a character and not a number. 
 
 ```{r}
 # cleaning function
@@ -274,7 +281,7 @@ total_arnold_md_loans
 ```
 ### Task 9: Change data type for amount
 **Task** Run the following codeblock to attempt to change the datatype for the amount field to a number. What is the new data type (three letter code) for amount? Answer below.
-**Answer**
+**Answer** Amount is now a dbl instead of a character. 
 
 ```{r}
 # cleaning function
@@ -290,7 +297,7 @@ cleaned_arnold_md_loans
 ```
 ### Task 10: Try again to summarize the amount column
 **Task** Run the following codeblock to add up the amount of all loans in this data.  What is the total? Answer below.
-**Answer**
+**Answer** 2033179 loans 
 ```{r}
 # cleaning function
 total_arnold_md_loans <- cleaned_arnold_md_loans %>%
@@ -304,7 +311,7 @@ total_arnold_md_loans
 
 ### Task 11: Check for duplicate rows
 **Task** Run the following codeblock to check for duplicate rows using get_dupes().  How many are there? What is the business name? Answer below.
-**Answer**
+**Answer** There was one set of duplicates for Stuart Jones LLC. 
 
 ```{r}
 cleaned_arnold_md_loans %>%
@@ -313,7 +320,7 @@ cleaned_arnold_md_loans %>%
 
 ### Task 12: Check for duplicate rows
 **Task** Run the following codeblock to use distinct() to get rid of duplicate rows. How many rows does the new dataframe have? Answer below. Add a description of what this code does to your reference notebook.
-**Answer**
+**Answer** 
 
 ```{r}
 # cleaning function

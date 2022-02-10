@@ -84,6 +84,14 @@ ppp_maryland_loans %>%
 
 Mutate-- allows you to add to your data
 
+  change the data type of the "id" field from a number (dbl) to a character, and then glimpse the data, to see the change. 
+```{r}
+ppp_maryland_loans <- ppp_maryland_loans %>%
+  mutate(id = as.character(id))
+
+glimpse(ppp_maryland_loans)
+```
+
 Filter-- reduce the data you're looking at to meet a certain criteria
 Filter is a tidyverse verb that uses criteria you supply to return a subset of the original data. Here's how it is structured:
 `filter(COLUMN_NAME OPERATOR CRITERIA)`
@@ -93,6 +101,9 @@ Filter is a tidyverse verb that uses criteria you supply to return a subset of t
     `filter(COLUMN_NAME OPERATOR CRITERIA)`
     filter(project_county_name == "PRINCE GEORGES")
     filter(amount >= "10000")
+    
+ filter(is.na(forgiveness_date)) %>%
+  #check to see that the value is actually na is.na in the forgiveness_date column
     
 ```{r}
 prince_georges <- maryland_ppp %>% filter(project_county_name == "PRINCE GEORGES")
@@ -194,3 +205,10 @@ maryland_ppp %>%
 
 To find a specific company's information:
 west_virginia_ppp %>% filter(servicing_lender_name=="Davis Trust Company")
+
+Select means show me these columns in my tibble table
+  select(name, jobs_retained, date_approved)%>%
+  
+Command Shift M gives you %>% 
+  
+  
