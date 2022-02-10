@@ -210,5 +210,7 @@ Select means show me these columns in my tibble table
   select(name, jobs_retained, date_approved)%>%
   
 Command Shift M gives you %>% 
+
+Filter then clean then group by then summarize 
   
   
