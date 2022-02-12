@@ -105,14 +105,16 @@ Some hints to help you answer this question:
 * When you examine the disclosure forms, there may be lots of stock sales and retirement accounts mixed in.  Ignore those. In the table in the disclosure forms, look for "Partnership" or "C-Corp" in the column named "Income Type"
 * This is a link to details on passage of the [CARES ACT](https://www.congress.gov/bill/116th-congress/house-bill/748). You can find a link to how the House voted by clicking on a link from [this page](https://www.congress.gov/bill/116th-congress/house-bill/748/actions).
 
-A3: The five businesses are named AAAAA BBBB CCCCCC DDDDDD EEEEEE. 
+A3: The five businesses are named DM Motors, Dutch Miller Chevrolet, Dutch Miller of Charleston, Dutch Miller of Charlotte and Dutch Miller Subaru. They are owned by representative Carol Miller's husband Dutch Miller and they are car dealerships. In total the businesses received XYZZZ in loans. $$$$$$$$$ has been forgiven. Carol Miller originally voted for 
 
-DM Motors
+
 
 ```{r}
 wv_ppp_loans %>% 
-  filter(congressional_district == "WV-03") %>% 
-  filter(name %in% c("DM Motors", "Dutch Miller Chevrolet", "Dutch Miller of Charleston", "Dutch Miller of Charlotte", "Dutch Miller Subaru"))
+ filter(name %in% c("DM MOTOR, INC","DUTCH MILLER CHEVROLET, INC.","DUTCH MILLER SUBARU, INC","DUTCH MILLER OF CHARLOTTE, INC","DUTCH MILLER OF CHARLESTON, INC")) %>% select(name,amount,business_type,congressional_district)
+  summarise(total_amount=sum(amount))
+
+  
   
 # Hint
 # First, create a dataframe that only has loans to those five companies
