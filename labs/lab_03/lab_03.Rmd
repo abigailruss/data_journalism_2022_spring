@@ -107,12 +107,13 @@ Some hints to help you answer this question:
 
 A3: The five businesses are named AAAAA BBBB CCCCCC DDDDDD EEEEEE. 
 
-American General Life
-WestCo Banking Savings-- 50% spousal interest
+DM Motors
 
 ```{r}
 wv_ppp_loans %>% 
-  filter(congressional_district == "WV-01")
+  filter(congressional_district == "WV-03") %>% 
+  filter(name %in% c("DM Motors", "Dutch Miller Chevrolet", "Dutch Miller of Charleston", "Dutch Miller of Charlotte", "Dutch Miller Subaru"))
+  
 # Hint
 # First, create a dataframe that only has loans to those five companies
 # Second, use that newly created dataframe to calculate total loan amount and percentage forgiven for those companies
