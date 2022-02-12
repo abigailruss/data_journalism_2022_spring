@@ -38,7 +38,7 @@ Note: To answer this question, you'll need to see every variation of the "city" 
 A1: The five cities with the largest number of koans were Charleston with 2802 loans, South Charleston with	478	loans, Saint Albans	with 296 loans, Dunbar with 162 loans and Nitro with  140 loans. 
 
 ```{r}
-wv_ppp_loans %>% 
+cleaned_wv_loans<- wv_ppp_loans %>% 
   filter(project_county_name == "KANAWHA") %>% 
   mutate(city = str_to_title(city)) %>% 
   mutate(city = case_when(
@@ -64,7 +64,7 @@ Q2: Find the 5-digit ZIP code in West Virginia that had the highest total amount
 * How much of that loan was forgiven?
 * Which number is bigger, the loan amount or the forgiveness amount? Can you explain the discrepancy?
 
-A2: The zip code 25301 got the highest total amount of loans recieving $160721320.88. 
+A2: The zip code 25301 got the highest total amount of loans receiving $160721320.88. The Eye and Ear Clinic of Charleston DBA Charleston Surgica got the highest loan in the zip code with a $1,520,007.00 loan. The zip code 25301 is in Charleston West Virginia, which is in the southwest of the state. The eye center is located at 	1306 Kanawha Blvd. The eye center had $1,538,254.68 forgiven which is larger then the forgiveness amount because the loan includes interest.
 
 ```{r}
 wv_ppp_loans %>% 
@@ -72,8 +72,11 @@ wv_ppp_loans %>%
   group_by(zip) %>% 
   summarise(total = sum(amount)) %>% 
   arrange(desc(total)) %>% 
-  filter(zip == 25301) 
-  
+  filter(zip == 25301)  
+wv_ppp_loans %>% 
+  filter(zip == 25301) %>% 
+  arrange(desc(amount)) %>% 
+  select(name:city,forgiveness_amount)
   
 # Hint
 # First, create a dataframe that shows the top 5-digit ZIP code by total dollar amount
@@ -102,10 +105,14 @@ Some hints to help you answer this question:
 * When you examine the disclosure forms, there may be lots of stock sales and retirement accounts mixed in.  Ignore those. In the table in the disclosure forms, look for "Partnership" or "C-Corp" in the column named "Income Type"
 * This is a link to details on passage of the [CARES ACT](https://www.congress.gov/bill/116th-congress/house-bill/748). You can find a link to how the House voted by clicking on a link from [this page](https://www.congress.gov/bill/116th-congress/house-bill/748/actions).
 
-A3:
+A3: The five businesses are named AAAAA BBBB CCCCCC DDDDDD EEEEEE. 
+
+American General Life
+WestCo Banking Savings-- 50% spousal interest
 
 ```{r}
-
+wv_ppp_loans %>% 
+  filter(congressional_district == "WV-01")
 # Hint
 # First, create a dataframe that only has loans to those five companies
 # Second, use that newly created dataframe to calculate total loan amount and percentage forgiven for those companies
