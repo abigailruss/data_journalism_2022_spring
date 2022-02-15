@@ -212,5 +212,11 @@ Select means show me these columns in my tibble table
 Command Shift M gives you %>% 
 
 ### Filter then clean (mutate) then group by then summarize then arrange
-  
-  
+
+###Bind Rows- combines rows with the same columns 
+it will only combine the stuff that is in the exact same structure
+```{r}
+# bind_rows with list
+estimates <- bind_rows(list(popestimate_2010, popestimate_2015, popestimate_2020))
+View(estimates)
+```
