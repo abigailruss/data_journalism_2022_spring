@@ -194,7 +194,7 @@ If you go to the data set and click on import dataset you can specifically go an
 
 floor_date rounds all of the dates down to the first day of the month and so it gives you a number for how many times something happened in a month
     if R doesn't know its a date it can't give you a month so its important to have stuff defined as dates instead of character fields
-    (ceiling dates round it up to the next month which is bad because it changes the means of months-- its importnat to use if you want to see what came in before a deadline that was the first of the month)
+    (ceiling dates round it up to the next month which is bad because it changes the means of months-- its important to use if you want to see what came in before a deadline that was the first of the month)
 ```{r}
 maryland_ppp %>%
   mutate(Month = floor_date(date_approved, "month")) %>%
@@ -211,6 +211,6 @@ Select means show me these columns in my tibble table
   
 Command Shift M gives you %>% 
 
-Filter then clean then group by then summarize 
+### Filter then clean (mutate) then group by then summarize then arrange
   
   
