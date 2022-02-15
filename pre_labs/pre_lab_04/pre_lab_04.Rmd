@@ -69,7 +69,9 @@ naics_codes <- read_csv('data/naics_codes.csv')
 
 ### Task 5: Join Them
 **Task** Run the following code to join the PPP data to the NAICS codes using the common column naics_code as the key. How many rows are there now?
-**Answer**
+**Answer** 190787-- every row in the PPP data has an equivalent in the naics code
+
+#left join eliminates the nonmatches
 
 ```{r}
 # with nrow included to match row total
@@ -99,7 +101,7 @@ maryland_zcta <- read_csv('data/maryland_zcta.csv')
 
 ### Task 9: Join ZCTA to PPP Data
 **Task** Join the ZCTA data to the our PPP & NAICS data. What's the error message you get? What do you think it means? Add a description of what this code does to your reference notebook.
-**Answer**
+**Answer** The error message says that it can't join two of the columns because they are incompatible types. I think it's because one of the columns are filled with numbers while the other was is for characters. It can't join a character field to a number field. We need to join them in the correct order of the data frames. 
 
 ```{r}
 # join on zip - but there's a problem
@@ -114,7 +116,7 @@ maryland_zcta <- maryland_zcta %>% mutate(across(ZCTA5N, as.character))
 
 ### Task 11: Join ZCTA to PPP Data and Check
 **Task** Join the ZCTA data to the our PPP & NAICS data. Examine the columns in the new dataframe - does every row have demographic data? HINT: Use the >> character to browse columns
-**Answer**
+**Answer** A lot of the data is missing because the join is only on the zip and ZCTA5N. The PPP data is not all 5 digit zip codes and join is only for an exact match. It can't join what doesn't match so we need to make the PPP data have 5 digits. 
 
 ```{r}
 maryland_ppp_with_naics_and_demographics <- maryland_ppp_with_naics %>% left_join(maryland_zcta, by=c("zip"="ZCTA5N"))
@@ -123,7 +125,7 @@ View(maryland_ppp_with_naics_and_demographics)
 
 ### Task 12: Make a Zip5 Column, Join ZCTA to PPP Data and Check Again
 **Task** Make a zip5 column and join again. Examine the new dataframe - now does every row have demographic data?
-**Answer**
+**Answer** All of the demographic data is now there because the columns match perfectly. 
 
 ```{r}
 # make a zip5 column and redo the join
@@ -133,7 +135,7 @@ maryland_ppp_with_naics_and_demographics <- maryland_ppp_with_naics %>% left_joi
 
 ### Task 13: Asking Demographic Questions
 **Task** Find the number of PPP loans that went to ZCTAs with more than 50% non-Hispanic Black population, and calculate the average and median amounts for those loans. Put your answers below.
-**Answer**
+**Answer** 41968 loans went to ZCTA's with more then 50% non-Hispanic Black populations. The average and median amounts of the loans were $55,546.84 and the median amount is $19,949. 
 
 ```{r}
 # zcta with > 50% non-Hispanic Black population
