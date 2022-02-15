@@ -33,7 +33,7 @@ wv_ppp_loans <- read_rds("lab_03.rds")
 
 Q1: Which five cities located in Kanawha County, West Virginia, got the largest _number_ of loans? How many did each get? To answer this question, you'll have to clean the very messy "city" field.
 
-Note: To answer this question, you'll need to see every variation of the "city" column in Kanawha County, and then fully clean the city field for those cities. Hint: once cleaned, the dataframe that counts the number of loans by city should have 38 distinct cities for Kanawha County.  get down to 38
+Note: To answer this question, you'll need to see every variation of the "city" column in Kanawha County, and then fully clean the city field for those cities. Hint: once cleaned, the dataframe that counts the number of loans by city should have 38 distinct cities for Kanawha County.
 
 A1: The five cities with the largest number of koans were Charleston with 2802 loans, South Charleston with	478	loans, Saint Albans	with 296 loans, Dunbar with 162 loans and Nitro with  140 loans. 
 
@@ -74,6 +74,7 @@ wv_ppp_loans %>%
   arrange(desc(total)) %>% 
   filter(zip == 25301)  
 wv_ppp_loans %>% 
+  ### mutate(zip = str_sub(zip, start=1L, end=5L)) %>%  YOU NEED THIS HERE TOO (to make sure that you get the highest number from both types of zip codes.)
   filter(zip == 25301) %>% 
   arrange(desc(amount)) %>% 
   select(name:city,forgiveness_amount)
@@ -114,6 +115,7 @@ wv_ppp_loans %>%
  filter(name %in% c("DM MOTOR, INC","DUTCH MILLER CHEVROLET, INC.","DUTCH MILLER SUBARU, INC","DUTCH MILLER OF CHARLOTTE, INC","DUTCH MILLER OF CHARLESTON, INC")) %>% select(name,amount,business_type, forgiveness_amount, congressional_district) %>% 
  summarise(total_amount=sum(amount),total_forgiven=sum(forgiveness_amount))
   
+###filter(str_detect(name,"DUTCH MILLER|DM MOTOR"))
   
 # Hint
 # First, create a dataframe that only has loans to those five companies
