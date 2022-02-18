@@ -145,7 +145,7 @@ maryland_ppp %>%
 ```
 
 **Q7** How many industries have exactly one loan in the data (hint: you can filter _after_ using `summarise` on any totals you create). From a newsworthiness standpoint, which of these is most worthy of further exploration, and why?
-**A7** There are 52 industries with exactly one loan in the data. I would like to do further research into who owns the Cotton Gin in Maryland and what are they using it for that they are requiring PPP loans. I think it will make for an interesting story about who is cotton ginning, why and how they still survive in the 21st century. 
+**A7** There are 52 industries with exactly one loan in the data. I would like to do further research into who owns the Cotton Gin in Maryland and what are they using it for that they are requiring PPP loans. I think it will make for an interesting story about who is cotton ginning, why and how they still survive in the 21st century. After doing more research on the company, it is almost impossible to find anything about what the company does.
 
 ```{r}
 maryland_ppp %>% 
