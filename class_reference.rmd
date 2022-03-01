@@ -226,3 +226,8 @@ key_collision_merge is what you do to tell it to use refiner
 cleaned_md_loans <- md_loans %>%
   mutate(city_clean=key_collision_merge(city)) %>%
   
+##Parse Number
+extracts the number and makes it a number field 
+
+
+  
