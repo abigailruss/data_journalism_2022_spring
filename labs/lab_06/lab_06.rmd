@@ -82,17 +82,21 @@ international_migration %>%
 **A2** The data I found breaks down the net international migration to the state of Maryland by region and by county. It is very important to note that some of the information could be double counted if you're not focusing because people can be counted twice, once in the region and once in the county. For example, someone who migrated to Montgomery County could also be counted as someone who migrated to the Suburban Washington Area so you must make sure you're separating the region and the county. In addition, I notice that there is a lot of migration to urban areas like the Baltimore Region and the Suburban Washington Area and the migration numbers drop significantly. Rural Maryland has much lower international migration. 
 
 **Q3** Which region & jurisdiction had the largest percentage change (either negative or positive) for international migration between July 2018 and July 2017? The formula for percentage change is easy to remember: (New-Old)/Old.
-**A3** [write your answer here] 
+**A3** Calvert County had the largest percent change. The county's international migration decreased by 76.92%. The region with the largest percent change was the Southern Maryland Region. 
 ## our numbers are just the change so what column is the old and new -- what is the old population. we only know the change in population which is the net migration. 
 
+the end of july 2017 to the end of july 2018 old is 16-17
+
 ```{r}
-# Write the code to produce your answer here
+international_migration %>% 
+  mutate(percent_change = (((`7/1/2017-7/1/2018`)-(`7/1/2016-7/1/2017`))/(`7/1/2016-7/1/2017`))*100) %>%
+  arrange(percent_change) %>% 
+  select(`State/Jurisdiction`, percent_change)
 
 ```
 
 **Q4** What's your best guess as to why these changes occurred, and in those places in particular?
-**A4** [write your answer here]
-
+**A4** I would guess that these decreases in international migration occurred particularly in Calvert County because it is an overwhelmingly white area and July 2017 was just a few months after Trump's travel ban. It could be possible that international migration decreased in rural areas like Southern Maryland and Calvert County in favor of more urban areas that could have more favorable views of international immigration. In addition, Calvert County is one of the richest country in America so it's possible that it is too expensive to live in the area. Calvert County is in the Southern Maryland Region so it makes sense that these decreases are occurring together. 
 
 ## Back to Tabula
 
@@ -131,13 +135,13 @@ domestic_migration %>%
 ```
 
 **Q6** How many regions & jurisdictions had net positive migration for July 2017, July 2018 and July 2019 (not just individually but all three together)?
-**A6** There were three regions and 15 cities/counties in Maryland with positive net migrations for July 2017, July 2018 and July 2019. Combined that leaves 18 regions and jurisdictions. 
-#is he asking for 2 or 3 here??????
+**A6** There were 14 regions and jurisdictions in Maryland with positive net migrations for July 2017, July 2018 and July 2019.  
+
+##filter each of them to be more than 0 and then add
 ```{r}
 domestic_migration %>% 
-  mutate(sums = `7/1/2016-7/1/2017` + `7/1/2017-7/1/2018`+ `7/1/2018-7/1/2019`) %>% 
-  arrange(desc(sums)) %>% 
-  select(`State/Jurisdiction`, sums)
+  filter(`7/1/2016-7/1/2017` > 0 & `7/1/2017-7/1/2018` >0 & `7/1/2018-7/1/2019`>0) %>% 
+  select(`State/Jurisdiction`, `7/1/2016-7/1/2017`, `7/1/2017-7/1/2018`, `7/1/2018-7/1/2019`)
 
 ```
 
