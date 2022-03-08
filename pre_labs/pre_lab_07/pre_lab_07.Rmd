@@ -1005,7 +1005,7 @@ Let's use parse_number() to remove the comma from the jun_2021 number and conver
 
 ### Task 34: Run code to run for loop to clean up tables
 **Task** Run the following for loop to clean up tables. Briefly describe the output that appears below the codeblock.
-**Answer**
+**Answer** I'm parsing the number and then renaming it to have shorter names and selecting the sector, description and the number of employees. 
 
 ```{r}
 
@@ -1058,7 +1058,7 @@ And inside our "for loop" at the end, we'll bind each employment_info dataframe 
 
 ### Task 35: Run code to run for loop to combine tables into a single table
 **Task** Run the following for loop combine tables into a single table. Briefly describe the output that appears below the codeblock.
-**Answer**
+**Answer** I set up an empty dataframe and each time I assemble the employment information for each sector I'm going to bind the rows so that they're going in the empty dataframe. Now I see that the 19 different tables are just one dataframe with 19 different rows with a sector, a description and employees from November 2021. 
 
 ```{r}
 
