@@ -1,7 +1,7 @@
 ---
 title: "pre_lab_07.Rmd"
-author: "sean mussenden"
-date: "8/24/2021"
+author: "Abigail Russ"
+date: "3/8/2022"
 output: html_document
 ---
 
@@ -11,7 +11,9 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ## Instructor demonstration points to hit
 1. Ensure students install rvest package and load it.
-
+```{r}
+install.packages('rvest')
+```
 
 ## Chapter 15
 
@@ -34,13 +36,15 @@ A six-digit NAICS code is the most specific.  As we remove numbers from the righ
 * 2122 - Metal Ore Mining Industry (which includes gold mining and things like silver mining, iron mining and copper mining)
 * 21 - Mining, Quarrying, and Oil and Gas Extraction Industry (which contains the metal mining industries mentioned above, but also oil drilling, coal mining and more).
 
+**so you can say businesses in the sector are employed etc. and see if there's fraud based on if the industry fits in a state
+
 It might be useful to have a lookup table of those top-level, two-digit NAICS codes (also called sector codes) for our analysis, to help us answer questions about what specific top-level industries got loans.  L
 
 Let's suppose we can't find a table like that for download, but we do see a version on the BLS website at this URL: [https://www.bls.gov/ces/naics/](https://www.bls.gov/ces/naics/).
 
 ### Task 2: Go to the web page linked above
 **Task** Visit the web page linked above. Briefly describe what you see there.
-**Answer**
+**Answer** The web page has a list of all of the two digit NIACS codes and what those sector codes stand for. 
 
 ### Task 3: Load image
 **Task** Run the following code to display an image showing what you should see on the web page.
@@ -78,7 +82,7 @@ In our web browser, if we right-click anywhere on the page and select "view sour
 
 ### Task 3: View source
 **Task** Follow the directions in the previous paragraph. Briefly describe what you see there.
-**Answer**
+**Answer** 
 
 Here's a picture of what some of the source code looks like.
 
@@ -95,7 +99,7 @@ Let's write a bit of code to tell R to go to the URL for the page and ingest all
 
 ### Task 5: Run code to read in html
 **Task** Run the following code to read in the html. Briefly describe the output that appears below the codeblock.
-**Answer**
+**Answer** It reads the URL and takes the contents within it. I'm not getting a dataframe, instead I'm getting a list of the two HTML tags.
 
 ```{r}
 # read in the html
@@ -115,7 +119,7 @@ If we click on the name "naics_industry" in our environment window, we can see t
 
 ### Task 6: Examine html
 **Task** Follow the directions in the previous paragraph to click on naics_industry in the environment window. Briefly describe what you see there.
-**Answer**
+**Answer** I see two HTML tags. 
 
 Nested within the `<html>` tag is the `<head>` and `<body>`, the two fundamental sections of most web pages. We're going to pull information out of the `<body>` tag in a bit.
 
@@ -147,7 +151,7 @@ Because it's inside of a table, and not some other kind of element (like a `<div
 
 ### Task 10: Run code to process tables
 **Task** Run the following code to process tables. Briefly describe the output that appears below the codeblock.
-**Answer**
+**Answer** It saved the 6 HTML tables that were on the webpage. 
 
 ```{r}
 # read in the html and extract all the tables
@@ -166,7 +170,7 @@ Click on it to open it up.
 
 ### Task 11: Inspect naics_industry.
 **Task** Follow the directions in the previous paragraph. Briefly describe what you see there.
-**Answer**
+**Answer** Now NAICS industry is now a list of those six HTML tables so we can find the one we want (the second table).
 
 It should look like this.
 
@@ -213,7 +217,7 @@ That's more like it! So, all we need to do now is to store that single dataframe
 
 ### Task 17: Run code to keep only table we want
 **Task** Run the following code to keep only the table we want. Briefly describe the output that appears below the codeblock.
-**Answer**
+**Answer** Instead of all 6 tables we just have one dataframe.
 
 ```{r}
 # Read in all html from table, store all tables on page as nested list of dataframes.
@@ -237,7 +241,7 @@ From here, we can do a little light cleaning. Let's use clean_names() to standar
 
 ### Task 18: Run code to do some light cleaning
 **Task** Run the following code to do light cleaning. Briefly describe the output that appears below the codeblock.
-**Answer**
+**Answer** I cleaned up the dataframe get rid of the 21st row. We also have lowercase column headers. 
 
 ```{r}
 # Read in all html from table, store all tables on page as nested list of dataframes.
@@ -358,7 +362,7 @@ Next, let's read in the html of that page, and store it as an object called empl
 
 ### Task 7: Run code to read in html
 **Task** Run the following code to read in the html. Briefly describe the output that appears below the codeblock.
-**Answer**
+**Answer** I'm saving it as employment info. 
 
 ```{r}
 
@@ -399,7 +403,7 @@ But essentially what the html_element function says is "find the html element th
 
 ### Task 9: Run code to get html_element with info we need
 **Task** Run the following code to get html_element with info we need. Briefly describe the output that appears below the codeblock.
-**Answer**
+**Answer** I'm reading the URL and then I'm finding a specific element on the page. We ask it to go and find an HTML element with a certain ID and grab it so I get only that specific table.
 
 ```{r}
 
@@ -446,7 +450,7 @@ Use clean_names() to standardize the column names, use slice() to keep only the 
 
 ### Task 11: Run code to keep row 2 and light cleaning
 **Task** Run the following code to keep row 2 and light cleaning. Briefly describe the output that appears below the codeblock.
-**Answer**
+**Answer** I'm only getting one row and 2 columns. We can also now refer to the value using the dollar sign. 
 
 ```{r}
 
@@ -536,7 +540,7 @@ First let's make a list of sectors, and save it as an object called "list_of_sec
 
 ### Task 15: Run code to make list of sectors
 **Task** Run the following code to make list of sectors. Briefly describe the output that appears below the codeblock.
-**Answer**
+**Answer** I get a new list of the sectors under the values tab. 
 ```{r}
 list_of_sectors <- c("Agriculture, Forestry, Fishing and Hunting", "Mining, Quarrying, and Oil and Gas Extraction", "Utilities", "Construction", "Manufacturing",
 "Wholesale Trade", "Retail Trade", "Transportation and Warehousing", "Information", "Finance and Insurance")
@@ -547,7 +551,7 @@ And now let's write a "for loop" to print out sector on that list.
 
 ### Task 16: Run code to use for loop to print sectors
 **Task** Run the following code to use a for loop to print list of sectors. Briefly describe the output that appears below the codeblock.
-**Answer**
+**Answer** It creates a value of sector and gives me a list of each of the secotors. 
 ```{r}
 # Define list of sectors
 list_of_sectors <- c("Agriculture, Forestry, Fishing and Hunting", "Mining, Quarrying, and Oil and Gas Extraction", "Utilities", "Construction", "Manufacturing",
@@ -663,7 +667,7 @@ We can use that information in our for loop by using the nrow() function, which 
 
 ### Task 22: Run code to display number of rows in naics_industry
 **Task** Run the following code to display number of rows naics_industry. Briefly describe the output that appears below the codeblock.
-**Answer**
+**Answer** It takes the Naics data frame and counts the number of rows.
 
 ```{r}
 nrow(naics_industry)
@@ -690,7 +694,7 @@ First, let's look at the codeblock we wrote earlier to extract the number of emp
 
 ### Task 24: Run code to load table from earlier
 **Task** Run the following code to load table from earlier. Briefly describe the output that appears below the codeblock.
-**Answer**
+**Answer** I am grabbing one table/one sector and grabbing the one data frame. 
 
 ```{r}
 
@@ -757,7 +761,7 @@ We're going to use mutate() and paste0() to concatenate (mash together) the thin
 
 ### Task 26: Run code to build url
 **Task** Run the following code to build url. Briefly describe the output that appears below the codeblock.
-**Answer**
+**Answer** I am programming a URL to make it so that each sector can fit into the URL. I'm building a URL so that for each row in the dataframe has its own URL using the sector name. So now on my naics_industry I now have a URL for each industry.The table id corresponds to the sector number.
 
 ```{r}
 
@@ -779,7 +783,7 @@ On the Utilities page (sector code 22), the ID for the table we want is "iag22em
 
 ### Task 27: Run code to build id
 **Task** Run the following code to build id. Briefly describe the output that appears below the codeblock.
-**Answer**
+**Answer** Now I have an xpath Id on my naics_industry dataframe.
 
 ```{r}
 
@@ -796,7 +800,7 @@ Lastly, we're going to use filter to remove the "Public Administration" sector, 
 
 ### Task 28: Run code to filter table
 **Task** Run the following code to filter table. Briefly describe the output that appears below the codeblock.
-**Answer**
+**Answer** We now have 19 rows because we got rid of the public administration sector. 
 
 ```{r}
 
@@ -819,7 +823,7 @@ We get 19 dataframes, each with one row, one for each sector.
 
 ### Task 29: Run code to run for loop and keep one row
 **Task** Run the following for loop and keep one row. Briefly describe the output that appears below the codeblock.
-**Answer**
+**Answer** We're running the website, finding the xpath id and then grabbing the data in the table and we're doing that 19 times so we need to store it somewhere. So now it looks like I'm saving each row as its own data frame. 
 
 ```{r}
 
@@ -959,7 +963,7 @@ We can add that back in by using bind_cols() to reconnect the each_row_df, which
 
 ### Task 33: Run code to run for loop to add in data
 **Task** Run the following for loop to add in data. Briefly describe the output that appears below the codeblock.
-**Answer**
+**Answer** We're adding the sector code and name to each table so we know 
 
 ```{r}
 
