@@ -86,7 +86,7 @@ Q6. What might explain why, according to this site, the DOJ has filed PPP-relate
 Q7. Which state had the most approved PPP loans per 100,000 population? [This web page](https://dwillis.github.io/jour472files/ppp_scraping_example/index.html) has links to 52 individual web pages, one for each state (plus Washington, D.C. and Puerto Rico). Each of those web pages contains a one-row html table that has the name of the state, the number of approved loans, and the 2019 population. Here's an example for [Alabama](https://dwillis.github.io/jour472files/ppp_scraping_example/states/alabama.html). You'll need to loop over the individual state urls, scrape each individual page and combine the information on each page into a single dataframe to answer this question. Don't forget to calculation the loans per 100,000. 
 
 antijoin and do calculations
-##A7.
+##A7. South Dakota had the most PPP loans per 100,000 people. 
 ```{r}
 state_url <- 'https://dwillis.github.io/jour472files/ppp_scraping_example/index.html'
   
@@ -100,21 +100,19 @@ states <- tibble()
 
 for(row_number in 1:nrow(state_ppp)) {
   each_row_df <- state_ppp %>%
-      slice(row_number)
-      one_state <- each_row_df$url
- state_info <- one_state %>%
-      read_html() %>%
-      html_table()
- 
- 
-  states <- state_info[[1]] %>%
-      clean_names() %>%
-      slice(2) %>%
-      bind_cols(each_row_df) %>% 
-      states <- states %>% 
-      bind_rows(state_info) 
+    slice(row_number)
+  one_state <- each_row_df$url
 
-  }
-
+  state_info <- one_state %>%
+    read_html() %>%
+    html_table()
+  
+  one_state <- state_info[[1]] %>%
+     clean_names()
+  states <- states %>% 
+    bind_rows(one_state) 
+}
+states <- states %>% mutate(loans_per_100k=total_ppp_loans/population*100000 ) %>%
+  arrange(desc(loans_per_100k))
 
 ```
