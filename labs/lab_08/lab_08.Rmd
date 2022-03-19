@@ -101,10 +101,10 @@ speak_spanish %>%
 ```
 
 **Q4** Given the counties with the largest percentage of 5-17 year-olds that speak Spanish at home, what stands out to you about the data? How would you describe the top 5 counties? How would you describe Garrett County's numbers?
-**A4** **COME BACK HERE** I am surprised at the steep drop off in the percentage of 5-17 year olds that speak Spanish at home between the county with the highest percentage and the county with the second highest percentage. 
+**A4** I am surprised at the drop off between Montgomery County and Caroline County. The two counties with the largest percentages are in the Washington suburbs, which is unsurprising because those are diverse areas. I do find it surprising that Baltimore City and the respective suburbs are so low on the list. Caroline County and Talbot County are so small that any additional Spanish speakers moving in could change the percentage, which is very different then for larger counties like Montgomery County, Price Georges County or Frederick County. These top 5 are either near metropolitan areas (near D.C.) or very small counties where just a few people could influence overall percentages.  
 
 **Q5** Which 5-digit zip code had the most removed PPP applications, and what is the percentage of Black population in that zip code according to the ACS? To answer this question, you will need to create separate dataframes with ACS data on total population by zip code and Black population by zip code. In each dataframe, rename the `estimate` column and remove the `variable` column. You'll need to combine the two dataframes in order to calculate the percentage, and then you can combine it with the PPP data. Remember: the PPP data may not have only 5-digit zip codes!
-**A5** 60620 had the most PPP applications removed 
+**A5** The zip code 60620 had the most PPP applications removed and the popuation is 95.69% Black.
 
 ```{r}
 top_zips <- ppp_applications %>%
@@ -126,7 +126,16 @@ black_population %>%
   rename(estimateBlack=estimate.x, estimateTotal=estimate.y) %>% 
   select(-variable.x, -variable.y,) %>% 
   mutate(percent_total = (estimateBlack/estimateTotal)*100) %>% 
-  arrange(desc(percent_total))
+  arrange(desc(percent_total)) 
+
+most_zip <- black_population %>% 
+  inner_join(total_race, by=c("GEOID", "NAME")) %>% 
+  rename(estimateBlack=estimate.x, estimateTotal=estimate.y) %>% 
+  select(-variable.x, -variable.y,) %>% 
+  mutate(percent_total = (estimateBlack/estimateTotal)*100) %>% 
+  arrange(desc(percent_total)) %>% 
+  filter(GEOID == '60620')
+
 
 
 
@@ -136,7 +145,7 @@ black_population %>%
 ```
 
 **Q6** How would you describe to an editor the top 10 zip codes with the most removed applications in terms of Black population? Where are they located, and what do they have in common? Are there any zip codes that seem different, and if so why?
-**A6**
+**A6** The top 10 zip codes with the most removed applications are 100% Black communities. The top 9 are in Alabama and the 10th is from Arkansas. They're all extremely small localities, some as small as 6 or 8 people, which is one or two families. 72367 is a different zip code because it's in Arkansas when the rest are in Alabama. 
 
 **Q7** What other columns from the PPP data could be useful in reporting on what happened to these removed loans?
-**A7**
+**A7** Other important columns from the PPP data that could be useful in reporting on what happened to these removed loans is the NAICS code, to see what industry requested loans; the loan amount to see how much was requested/given; and the servicing lender to see if it was all the same lender. 
