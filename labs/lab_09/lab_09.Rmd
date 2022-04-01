@@ -115,7 +115,7 @@ combined %>%
 geom_bar(aes(x=reorder(NAME,per_onehundredthousand), weight=per_onehundredthousand),fill="lightblue")
 ```
 
-**A2.** In order, South Carolina, North Dakota, Nebraska, Georgia, Iowa, Illinois, Louisiana, Florida, Mississippi and Montana had the most PPP Loans per 100,000 people. 
+**A2.** In order, South Carolina, North Dakota, Nebraska, Georgia, Iowa, Illinois, Louisiana, Florida, Mississippi and Montana had the most PPP Loans per 100,000 people.
 
 **Q3.**  A scatterplot is a type of chart that helps us see relationships between two variables. One variable goes on the x axis, the other on the y axis.  For each row/observation in our data, a scatterplot puts a circle (or a "point") where the two variables intersect on a grid. 
 
@@ -139,5 +139,24 @@ To answer those questions, make a codeblock and do the following:
 
 **A3.**  
 
+```{r}
+chart<-ppp_data %>% 
+  filter(amount < 25000) %>% 
+  select(forgiveness_amount, amount) %>% 
+  mutate(forgiveness_amount = case_when(is.na(forgiveness_amount)~0,
+         TRUE ~ forgiveness_amount))
+
+chart %>% 
+  ggplot(aes(x=amount, y=forgiveness_amount)) +
+  geom_point()+
+  labs(
+    title="West Virgina PPP Loan Amounts and Forgiveness Amounts\n",
+    x = "PPP Loan Amounts\n",
+    y = "\nLoan Forgiveness Amounts",
+    caption = "source: SBA PPP loan database"
+  )
+
+```
+No loans were forgiven for more than the original amount distributed, even if there was interest owed. Not every loan was forgiven to the fullest amount. There are noticeable outliers. It also seems like there was a standard payment made because there looks to be the line looks like there were fixed amounts loaned out because it looks like the line was constantly shifted down. It's difficult to tell if a lot of people had their loans fully forgiven because I can't tell if the line where all the money was forgiven is as thick or thicker than the line where no money was forgiven- the points overlap too much. For that same reason, its also hard to tell how many people didn't have their loans forgiven at all because you can't tell the thickness of the bottom line, which is people who didn't have their loans forgiven at all. There are definitely a good amount of people who who didn't get their loans fully forgiven, they are represented by the points in the middle of the graph.
 
 -30-
