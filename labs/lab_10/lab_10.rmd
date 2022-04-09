@@ -76,7 +76,42 @@ joined <- apps_by_state %>%
 
 **Q2.** Using Datawrapper, make a different (ideally better) version of the chart you made above. TO BE CLEAR: this new graphic should show information about states and loans with undisbursed amounts, so don't, for example, focus on a single state. To do this, you MUST go back in R and do any calculations or add additional data to make the chart more effective or answer the above question in a different way. Your chart MUST be different in that it cannot be a bar chart showing the counts of total and undisbursed applications by state. It could be a bar chart showing another calculation or metric, or a scatterplot, or some other form. Follow the same general guidelines as above for the chart's visual elements, and publish it and including the URL below, along with an explanation of how this chart is different from the first one and how you decided what to do.
 
-**A2.** 
+**A2.** Fo my bar chart I wanted to compare the amount forgiven in PPP loans to the amount approved and the amount undisbursed. Interestingly, I found that the state with the least amount of loans forgiven was also the state with the highest among of loans distributed and the highest undisbursed amount of loans. This chart is different because the first one was showing the most PPP loans in total. This chart shows the percent of loans forgiven in each state. It's interesting because the state with the most loans awarded and the most money given out in loans has the least percent of loans forgiven of all the states.   https://datawrapper.dwcdn.net/06NWl/1/ 
+```{r}
+barber_shop_ppp2 <- read_csv("data/barber_shops_ppp2.csv") %>%
+  replace_na(list(initial_approval_amount=0,undisbursed_amount=0,forgiveness_amount=0))
+
+apps_by_state2<- barber_shop_ppp2 %>% 
+ group_by(state) %>% 
+ summarize(initial_approval_amount=sum(initial_approval_amount)) %>% 
+arrange(desc(initial_approval_amount))
+
+undisbursed2 <-barber_shop_ppp2 %>%
+  group_by(state) %>% 
+  summarize(undisbursed_amount=sum(undisbursed_amount)) %>% 
+  arrange(desc(undisbursed_amount))
+
+forgiven <-barber_shop_ppp2 %>% 
+  filter(forgiveness_amount >0) %>% 
+  group_by(state) %>% 
+  summarize(amount_forgiven=sum(forgiveness_amount)) %>% 
+  arrange(desc(amount_forgiven))
+
+join2 <-apps_by_state2 %>% 
+  left_join(undisbursed2, by=c('state')) %>% 
+  arrange(desc(initial_approval_amount)) 
+  
+join3 <-join2 %>% 
+  left_join(forgiven, by=c('state')) %>% 
+  mutate(percent_forgiven= (amount_forgiven/initial_approval_amount)*100, 
+         state=paste0(state," (",round(percent_forgiven,2),"%)")) %>% 
+  arrange(percent_forgiven) %>% 
+  select(-percent_forgiven) %>%
+  head(10)
+
+write_csv(join3, "data/barber_shops_paid.csv")
+
+```
 
 **Q3.** The online lender Kabbage, Inc. is featured in the [ProPublica PPP fake farms story](https://www.propublica.org/article/ppp-farms). To show where Kabbage was lending money, make a county-level map that shows the percentage of loans in each county that were Kabbage loans. To do this, make a codeblock and do the following:
 
@@ -89,23 +124,24 @@ joined <- apps_by_state %>%
 7. Make a county-level map using that exported CSV file that displays the percentage of Kabbage loans. Style it so that the tooltip displays the county and the percentage, and format all percentages shown on the map so that they appear with one decimal point (such as 3.4%). Follow the same general guidelines as above for the chart's visual elements, and give the map a title, description and source. Provide a legend caption and format the percentage in the same way as on the tooltips.
 8. In the answer space below, provide the URL for your published map and then describe where Kabbage loans are and are not found. Where are they more common? Look specifically at Florida in the data: are there counties on the map where no data is displayed? Why?
 
-**A3.**  
+**A3.** Cabbage loans are more common on the east coast than the west coast. They are commonly found in the south, like Florida, Georgia and Texas, rather than northern states like the Dakotas, Montana, Minnesota, although they are found in Washington state and in the northeast (but at lower rates than in the southern states). They are not common in the middle of the country like Nebraska, Kansas and Iowa. Interestingly, they are not found in California or Nevada. There is one county where data is displayed and I think it is because we have no data on the county and they didn't list it as 0 loans, instead they weren't able to collect any data.  https://datawrapper.dwcdn.net/EytxJ/1/
 ```{r}
-kabbage_counties <- read_csv("data/kabbage_counties.csv")
+kabbage_counties2 <- read_csv("data/kabbage_counties2.csv")
 
-all_counties <- read_csv("data/all_counties.csv")
+all_counties2 <- read_csv("data/all_counties2.csv")
 
-all_kabbage_counties <- all_counties%>% 
-  left_join(kabbage_counties, by=c('project_county_name', 'project_state')) %>% 
+all_kabbage_counties2 <- all_counties2%>% 
+  left_join(kabbage_counties2, by=c('project_county_name', 'project_state')) %>% 
   rename(total_loans=total.x, kabbage_loans=total.y) %>% 
   mutate(percent_kabbage_loans = (kabbage_loans/total_loans)*100)
 
-county_fips <- read_csv("data/county_fips.csv")
+county_fips2 <- read_csv("data/county_fips2.csv")
 
-akc_fips <- all_kabbage_counties %>% 
-  left_join(county_fips, by=c('project_state'='state', 'project_county_name'='match_county'))
+akc_fips2 <- all_kabbage_counties2 %>% 
+  left_join(county_fips2, by=c('project_state'='state', 'project_county_name'='match_county')) %>% 
+  replace_na(list(percent_kabbage_loans=0))
 
-write_csv(akc_fips, "data/county_fips.csv")
+write_csv(akc_fips2, "data/county_fips_work.csv")
   
 ```
 
