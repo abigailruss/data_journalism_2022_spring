@@ -92,7 +92,7 @@ What kind of hospitals do we have? General acute care hospital psychiatric, mili
 
 ### Task: Run code
 **Task** Run the following code. Describe the output in the space below.
-**Answer**
+**Answer** This code sorts all of the different types of hospitals and counts how many hospitals in Maryland fall into that category. 
 
 ```{r}
 md_hospitals %>%
@@ -107,7 +107,7 @@ Let's narrow our data to only look at the 50 "General Acute Care hospitals."
 
 ### Task: Run code
 **Task** Run the following code. Describe the output in the space below.
-**Answer** 
+**Answer** Now I am seeing a dataframe for all of the information for Maryland hospitals that are considered general acute care. 
 
 ```{r}
 
@@ -302,7 +302,7 @@ Next, we'll go out and get population data for each county from tidycensus.  The
 
 ### Task: Run code
 **Task** Run the following code. Describe the output in the space below.
-**Answer** Now we have a dataframe with the Maryland county population. ###Check this
+**Answer** Now we have a dataframe with the Maryland county population.
 
 ```{r}
 
@@ -355,7 +355,7 @@ Let's clean the population table. We're going to rename the "NAME" column to "CO
 
 ### Task: Run code
 **Task** Run the following code. Describe the output in the space below.
-**Answer** I am making it so the names of the Maryland counties are the same so the counties can match/join maryland beds by county and maryland county population. 
+**Answer** I am making it so the names of the Maryland counties are the same so the counties can match/join Maryland beds by county and Maryland county population. 
 
 ```{r}
 md_county_population <- md_county_population %>%
@@ -435,7 +435,7 @@ This map is okay, but the color scale makes it hard to draw fine-grained differe
 
 ### Task: Run code
 **Task** Run the following code. Describe the output in the space below.
-**Answer**
+**Answer** I am seeing the same map as before but now I have changed it so the color scale key is better to make it more easier to read. 
 
 ```{r}
 ggplot() + 
@@ -450,7 +450,7 @@ So let's change the color scale to a "log" scale, which will help us see those d
 
 ### Task: Run code
 **Task** Run the following code. Describe the output in the space below. What patterns do you see?
-**Answer**
+**Answer** There are now more specific numbers on the key scale as well as an additional color so there is more variation and the map is more descriptive. it's easier to read the map because there is a greater differential in beds per 100,000 people. I am seeing that in more urban areas there are less beds per 100,000 people while in rural areas, like the panhandle and parts of the eastern shore there are more beds per 100,000 people. 
 
 ```{r}
 ggplot() + 
