@@ -99,12 +99,24 @@ Google the top 2-3 zip codes from both Maryland and non-Maryland results and des
 **A2.**
 
 ```{r}
-vaccinated_status <-read.csv("https://raw.githubusercontent.com/state-of-maryland/VaccineCSVs/master/Vax_ZIP_CODE_FirstSecondSingle_Totals_Raw.csv")
+vaccinated_status <-read_csv("https://raw.githubusercontent.com/state-of-maryland/VaccineCSVs/master/Vax_ZIP_CODE_FirstSecondSingle_Totals_Raw.csv") %>% 
+  clean_names()
+
+vaccinated_status<- vaccinated_status %>% 
+  mutate(today = today()) %>% 
+  filter(!is.na(fully_vaccinated)) %>% 
+  filter(str_length(zip_code) == 5)
 
 zip <- read_csv("https://raw.githubusercontent.com/midwire/free_zipcode_data/develop/all_us_zipcodes.csv")
 vax <- read_csv("https://raw.githubusercontent.com/state-of-maryland/VaccineCSVs/master/Vax_ZIP_CODE_FirstSecondSingle_Totals_Raw.csv") 
 now()
 vax <- vax %>% mutate(ZIP_CODE = str_pad(ZIP_CODE,5,pad = "0")) %>% inner_join(zip,c("ZIP_CODE"="code"))
+
+maryland_zips<- zip %>% 
+  filter(state == "MD")
+
+non_maryland_zips <- zip %>% 
+  filter(state != "MD")
   
 ```
 
