@@ -46,7 +46,7 @@ Then write code that will construct a sentence about the data described above co
 
 Put your sentence in the answer below, along with one other question you could ask of this data.
 
-**A1.** "The number of Traffic Stop 1054 incidents in the last 30 days, since March 20"
+**A1.** "In the last 30 day, from March 22 to April 21, 7 Suspicious Event incidents occurred."
 
 ```{r}
 crime_log <- read_csv("https://raw.githubusercontent.com/dwillis/wvu-projects/master/crime-log/crime_log.csv") %>% 
@@ -63,11 +63,20 @@ one_month<- crime_log %>%
   filter(date >= latest_date$date- 30) %>% 
   filter(title == latest_date$title)
 
-sub <- paste("The number of" format(latest_date$title, format="%B %d")) "incidents in the last 30 days, since", format(latest_date$date- 30, format="%B %d"))
+##The sentence should include the most recent date, the title of the incident and the number of times that kind of incident has occurred in the previous 30 days.
+
+
+sub <- paste0("In the last 30 day, from ",format(latest_date$date-30, format="%B %d"), " to " ,format(latest_date$date, format="%B %d"),", ",nrow(one_month)," ", str_to_lower(latest_date$title), " incidents occurred")
 sub
 
+
 total_last_month <- crime_log%>% 
-  filter(title >= latest_date$date- 30)
+  filter(date >= latest_date$date- 30) %>% 
+  count(title) %>% 
+  arrange(desc(n)) 
+
+sub02 <- str_c("In the last 30 day, from ",format(latest_date$date-30, format="%B %d"), " to " ,format(latest_date$date, format="%B %d"),", ",total_last_month$n[1]," ", str_to_lower(total_last_month$title[1]), " incidents occurred")
+sub02
 ```
 
 **Q2.** Maryland produces a [CSV file](https://raw.githubusercontent.com/state-of-maryland/VaccineCSVs/master/Vax_ZIP_CODE_FirstSecondSingle_Totals_Raw.csv) showing the total number of vaccinations by zip code and -- interestingly -- it includes non-Maryland zip codes (as well as some zip codes that seem to be bad data). write a script that reads the CSV file, making the columns more readable and adding today's date. Then output the top 25 Maryland zip codes and top 25 non-Maryland zip codes based on number of people fully vaccinated, and write both dataframes out to CSV files, using the following name formats:
