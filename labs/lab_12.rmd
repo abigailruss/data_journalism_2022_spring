@@ -97,8 +97,11 @@ To do that, you will need to:
 Google the top 2-3 zip codes from both Maryland and non-Maryland results and describe them in your answer.
 
 **A2.**
+The Maryland zip code with the lowest amount of fully vaccinated people is 21870 (Wenona) and the Maryland zip code with the highest amount of vaccinated people is 20906 (Silver Spring).
 
+The zip code with the highest amount of fully vaccinated people is 20011 (Washington DC) and the  zip code with the lowest amount of vaccinated people is 22201 (Arlington). 
 
+The top 3 zip codes from Maryland with the highest number of fully vaccinated people are 20906 (Silver Spring), 20878 (Gaithersburg/North Potomac) and 20874 (Germantown). These are all zip codes within 10-15 miles of eachother and all of them are in Montgomery County. The top 3 Non-Maryland zip codes with the highest number of fully vaccinated people are 20011 (Washington), 20002 (Washington), 20009 (Washington). These are all in Washington D.C. 
 
 ```{r}
 vaccinated_status <-read_csv("https://raw.githubusercontent.com/state-of-maryland/VaccineCSVs/master/Vax_ZIP_CODE_FirstSecondSingle_Totals_Raw.csv") %>% 
@@ -127,6 +130,9 @@ non_maryland_zips <- vaccinated_status %>%
   head(25)
 
 md_bottom <- maryland_zips %>% 
+  tail(1)
+
+nmz_bottom<- non_maryland_zips %>% 
   tail(1)
   
 filename <- paste0("maryland_zips_",format(today(),"%Y%m%d"),".csv")
