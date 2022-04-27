@@ -17,7 +17,9 @@ knitr::opts_chunk$set(echo = TRUE)
 ## Load libraries and establish settings
 ```{r}
 library(tidyverse)
+library(tidycensus)
 library(janitor)
+library(tigris)
 library(lubridate)
 library(ggrepel)
 library(sf)
@@ -135,9 +137,9 @@ md_bottom <- maryland_zips %>%
 nmz_bottom<- non_maryland_zips %>% 
   tail(1)
   
-filename <- paste0("maryland_zips_",format(today(),"%Y%m%d"),".csv")
+maryland_top_zips %>% write_csv(file=paste0("maryland_zips_",format(today(),"%Y%m%d"),".csv"))
 
-filename02 <- paste0("non_maryland_zips_", format(today(), "%Y%m%d"),".csv")
+non_maryland_zips %>% write_csv(file=paste0("non_maryland_zips_", format(today(), "%Y%m%d"),".csv"))
 ```
 
 **Q3.** Maryland has had one of the more successful vaccination rates, but you want to understand where a significant portion of the population remains less than fully vaccinated. Make a dataframe of all Maryland zip codes from the vaccination data you used in Q2 and join it to Maryland zip code population data from the Census API. Calculate the percentage of fully vaccinated for each zip code and then make a map showing the zip codes with less than 50 percent fully vaccinated. Put a blank map with the outline of Maryland counties (which you can get from Tigris) behind it for context. Add a label to the map describing what the data is and include the date from the vaccination data (programmatically, so you can run it every day).
@@ -146,9 +148,26 @@ You WILL need to ensure that the columns you use to join the two dataframes are 
 
 Describe the output of the map below, and say what you think the most interesting areas are.
 
-**A3.**
+**A3.** The map shows me that the zip codes with less than 50% of the population are in more rural areas. I think it is most interesting that the majority of the zip codes are along the sides of the state either near Delaware and the Eastern Shore or West Virginia and Pennsylvania. There are noticeably less zip codes in this category along the Virginia border and in the middle of the state. Overall, the area in Maryland with the most dense amount of zip codes under 50% fully vaccinated is in the peninsula near West Virginia. I think it's interesting that there are occasional darker counties (with around 10-20% fully vaccinated) in the center of the state but I'm assuming those are relatively small zipcodes, possibly with lots of children? 
 
 ```{r}
+census_population <- get_acs(geography = "zcta", variables = c(population="B01001_001"), geometry = "TRUE")
 
+md_census <-maryland_zips %>% left_join(census_population,by=c("zip_code"="GEOID"))
+
+md_census <-md_census %>% 
+  mutate(percent_fully_vaccinated = (fully_vaccinated/estimate)*100)
+
+fifty_percent<-md_census %>% 
+  filter(percent_fully_vaccinated <= 50)
+
+md_counties<- counties() %>% 
+  filter(STATEFP=="24")
+
+p1<-md_counties %>% ggplot() +
+  geom_sf() +
+  geom_sf(data=fifty_percent, aes(fill=percent_fully_vaccinated,geometry=geometry))+
+  labs(subtitle = paste0("Zip codes in Maryland with less than 50% of the population fully vaccinated as of ", format(today(),"%Y_%m_%d")))+
+  theme_minimal()
 
 ```
