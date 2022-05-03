@@ -293,7 +293,7 @@ Another popular use of text analysis is to measure the sentiment of a word - whe
 
 ### Task 15: Load the bing lexicon and produce sentiments for our 2020 and 2021 unique words
 **Task** Run the following code and describe the results. Do any of the sentiments seem incorrect or counter-intuitive?
-**Answer** It asks the computer to make sure the tone/sentiments of the word are correct. It assigns words positive and negative sentiment. This dataframe loads 2 dataframes, one for 2020 and one for 2021. Each dataframe has the list of the unique words and the number of times they were used and if the word is positive or negative sentiment. 
+**Answer** It asks the computer to make sure the tone/sentiments of the word are correct. It assigns words positive and negative sentiment. This dataframe loads 2 dataframes, one for 2020 and one for 2021. Each dataframe has the list of the unique words and the number of times they were used and if the word is positive or negative sentiment. The sentiment for the word positive could have been incorrect because if we're talking about testing positive, the sentiment for that should be negative, but here its classified as positive. 
 
 ```{r}
 bing <- get_sentiments("bing")
